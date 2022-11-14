@@ -1,0 +1,27 @@
+.search-container {
+  @apply mt-4;
+  .default-label {
+    @apply title-medium top-4;
+  }
+  .ais-Hits {
+    @apply box-border mt-4;
+    .ais-Hits-list {
+      @apply text-on-surface title-medium;
+      .ais-Hits-item {
+        .ais-Highlight {
+          .ais-Highlight-highlighted {
+            @apply bg-primary-container text-on-surface-variant rounded;
+          }
+          .ais-Highlight-nonHighlighted {
+          }
+        }
+      }
+    }
+  }
+  .ais-Hits--empty {
+    &::after {
+      content: "哎哦，没有搜索到相关文章; 请重新搜索。";
+    }
+    @apply h-32;
+  }
+}

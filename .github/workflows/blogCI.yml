@@ -1,0 +1,58 @@
+
+
+name: build and auto publish github pages
+on:
+  push:
+    branches:
+      - master
+jobs:
+  blog_build:
+    runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_ALGOLIA_INDEX_NAME: blog
+      NEXT_PUBLIC_ALGOLIA_APP_ID: ${{ secrets.ALGOLIA_APP_ID }}
+      NEXT_PUBLIC_ALGOLIA_ADMIN_KEY: ${{ secrets.ALGOLIA_ADMIN_KEY }}
+      NEXT_PUBLIC_ALGOLIA_SEARCH_KEY: ${{ secrets.ALGOLIA_SEARCH_KEY }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16.x"
+      - name: install depths
+        run: yarn
+      - name: build
+        run: yarn build
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.BLOG_TOKEN }}
+          publish_dir: ./out
+
+  #     - name: upload to artifact
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: blog
+  #         path: out/
+      
+  # blog_deploy:
+  #   needs: [blog_build]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: download from artifact
+  #       uses: actions/download-artifact@v3
+  #       with:
+  #         name: blog
+  #     - name: commit out file
+  #       run: |
+  #         git init
+  #         git config --local user.email "charlesmaxwellyoung@gmail.com"
+  #         git config --local user.name "tansincosy"
+  #         git add .
+  #         git commit -m "add pages by github bot" -a
+  #     - name: push_pages
+  #       uses: ad-m/github-push-action@master
+  #       with:
+  #         token: "${BLOG_TOKEN}"
+  #         owner: "tansincosy"
+  #         branch: "pages"
+  #         message: "add pages"
